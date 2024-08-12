@@ -3,12 +3,47 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { uploadVideo } from '../services/AllApi';
 
 function Add() {
     const [show, setShow] = useState(false);
 
+    // state to store all form field values
+    const [videoDetails, setVideoDetails] = useState({
+        videoId: '',
+        caption: '',
+        imageUrl: '',
+        youtubeLink: ''
+    })
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const addVideoDetails = async() => {
+        const { videoId, caption, imageUrl, youtubeLink } = videoDetails
+        if (!videoId || !caption || !imageUrl || !youtubeLink) {
+            alert('Please fill the form completely')
+        }
+        else {
+            console.log("final data");
+            console.log(videoDetails)
+            const response = await uploadVideo(videoDetails);
+            console.log(response)
+            if(response.status === 201){
+                alert(`${response.data.caption} successfully uploaded`);
+                handleClose();
+            }
+            else {
+                alert("Something went wrong")
+            }
+        }
+    }
+    const getEmbededLink = (data) => {
+        console.log("==inside getEmbededLink method===s")
+        const link = `https://www.youtube.com/embed/${data.slice(-11)}`
+        console.log(link)
+        setVideoDetails({ ...videoDetails, youtubeLink: link })
+    }
     return (
         <>
             <div className='d-flex align-items-center'>
@@ -20,19 +55,26 @@ function Add() {
                     <Modal.Title><i class="fa-solid fa-film text-warning me-3"></i><span className='textStyle'>UPLOAD VIDEO</span></Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='bg-dark'>
-                    <p className='textStyle' style={{fontWeight:'700'}}>Please fill the form</p>
+                    <p className='textStyle' style={{ fontWeight: '700' }}>Please fill the form</p>
                     <Form className='border border-secondary p-3 rounded' data-bs-theme='light'>
                         <Form.Group className="mb-3" controlId="formBasicEmail" >
-                            <Form.Control type="text" placeholder="Enter Video ID" />
+                            <Form.Control type="text" placeholder="Enter Video ID"
+                                onChange={(e) => setVideoDetails({ ...videoDetails, videoId: e.target.value })} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Control type="text" placeholder="Enter Video Caption" />
+                            <Form.Control type="text" placeholder="Enter Video Caption"
+                                onChange={(e) => setVideoDetails({ ...videoDetails, caption: e.target.value })}
+                            />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Control type="text" placeholder="Enter Video Thumbnail URL" />
+                            <Form.Control type="text" placeholder="Enter Video Thumbnail URL"
+                                onChange={(e) => setVideoDetails({ ...videoDetails, imageUrl: e.target.value })}
+                            />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Control type="text" placeholder="Enter Youtube Video Link" />
+                            <Form.Control type="text" placeholder="Enter Youtube Video Link"
+                                onChange={(e) => getEmbededLink(e.target.value)}
+                            />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
@@ -40,7 +82,7 @@ function Add() {
                     <Button variant="secondary" onClick={handleClose}>
                         CANCEL
                     </Button>
-                    <Button variant="warning" onClick={handleClose}>
+                    <Button variant="warning" onClick={addVideoDetails}>
                         UPLOAD
                     </Button>
                 </Modal.Footer>

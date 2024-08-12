@@ -15,7 +15,7 @@ function Home() {
             </div>
             <div className='container mt-5 mb-5 d-flex justify-content-between'>
                     <div className='all-videos'>
-                        <h4>All Videos</h4>
+                        <h4 className='textStyle mb-3'>All Videos</h4>
                         <View/>
                     </div>
                     <div className='category'>

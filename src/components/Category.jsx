@@ -6,9 +6,14 @@ import Form from 'react-bootstrap/Form';
 
 function Category() {
     const [show, setShow] = useState(false);
+    const [categoryName, setCategoryName] = useState()
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const addCategory = ()=>{
+        console.log("====category name====");
+        console.log(categoryName)
+    }
     return (
         <>
             <button className='btn btn-warning' onClick={handleShow}>Add New Category</button>
@@ -19,8 +24,10 @@ function Category() {
                 <Modal.Body className='bg-dark'>
                     <p className='textStyle' style={{ fontWeight: '700' }}>Please fill the form</p>
                     <Form className='border border-secondary p-3 rounded' data-bs-theme='light'>
-                        <Form.Group className="mb-3" controlId="formBasicEmail" >
-                            <Form.Control type="text" placeholder="Enter Video ID" />
+                        <Form.Group className="mb-3"  >
+                            <Form.Control type="text" placeholder="Enter Category Name"
+                                onChange={(e) => setCategoryName(e.target.value)}
+                            />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
@@ -28,8 +35,8 @@ function Category() {
                     <Button variant="secondary" onClick={handleClose}>
                         CANCEL
                     </Button>
-                    <Button variant="warning" onClick={handleClose}>
-                        UPLOAD
+                    <Button variant="warning" onClick={addCategory}>
+                        ADD
                     </Button>
                 </Modal.Footer>
             </Modal>
