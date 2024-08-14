@@ -12,7 +12,6 @@ function Add({setUploadVideoStatus}) {
 
     // state to store all form field values
     const [videoDetails, setVideoDetails] = useState({
-        videoId: '',
         caption: '',
         imageUrl: '',
         youtubeLink: ''
@@ -22,8 +21,8 @@ function Add({setUploadVideoStatus}) {
     const handleShow = () => setShow(true);
 
     const addVideoDetails = async () => {
-        const { videoId, caption, imageUrl, youtubeLink } = videoDetails
-        if (!videoId || !caption || !imageUrl || !youtubeLink) {
+        const { caption, imageUrl, youtubeLink } = videoDetails
+        if ( !caption || !imageUrl || !youtubeLink) {
             toast.warning('Please fill the form completely')
         }
         else {
@@ -60,10 +59,7 @@ function Add({setUploadVideoStatus}) {
                 <Modal.Body className='bg-dark'>
                     <p className='textStyle' style={{ fontWeight: '700' }}>Please fill the form</p>
                     <Form className='border border-secondary p-3 rounded' data-bs-theme='light'>
-                        <Form.Group className="mb-3" controlId="formBasicEmail" >
-                            <Form.Control type="text" placeholder="Enter Video ID"
-                                onChange={(e) => setVideoDetails({ ...videoDetails, videoId: e.target.value })} />
-                        </Form.Group>
+                    
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Control type="text" placeholder="Enter Video Caption"
                                 onChange={(e) => setVideoDetails({ ...videoDetails, caption: e.target.value })}

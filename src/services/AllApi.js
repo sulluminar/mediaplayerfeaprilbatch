@@ -8,5 +8,12 @@ export const uploadVideo = async (reqBody) => {
 
 //get all videos
 export const getAllVideos = async () => {
-    return await commonApi('GET',`${serverURL}/videos`,"")
+    return await commonApi('GET', `${serverURL}/videos`, "")
+    // http://localhost:4000/videos
+}
+
+// delete video
+export const deleteVideo = async (id) => {
+    return await commonApi('DELETE', `${serverURL}/videos/${id}`,{})
+    // http://localhost:4000/videos/1
 }
