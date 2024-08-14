@@ -4,8 +4,10 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { uploadVideo } from '../services/AllApi';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-function Add() {
+function Add({setUploadVideoStatus}) {
     const [show, setShow] = useState(false);
 
     // state to store all form field values
@@ -19,22 +21,23 @@ function Add() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const addVideoDetails = async() => {
+    const addVideoDetails = async () => {
         const { videoId, caption, imageUrl, youtubeLink } = videoDetails
         if (!videoId || !caption || !imageUrl || !youtubeLink) {
-            alert('Please fill the form completely')
+            toast.warning('Please fill the form completely')
         }
         else {
             console.log("final data");
             console.log(videoDetails)
             const response = await uploadVideo(videoDetails);
             console.log(response)
-            if(response.status === 201){
-                alert(`${response.data.caption} successfully uploaded`);
+            if (response.status === 201) {
+                setUploadVideoStatus(response.data)
+                toast.success(`${response.data.caption} successfully uploaded`);
                 handleClose();
             }
             else {
-                alert("Something went wrong")
+                toast.error("Some thing went wrong")
             }
         }
     }
@@ -87,6 +90,7 @@ function Add() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <ToastContainer />
         </>
     )
 }
