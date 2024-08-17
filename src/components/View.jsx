@@ -3,8 +3,9 @@ import VideoCard from './VideoCard'
 import { getAllVideos } from '../services/AllApi'
 import { Col, Row } from 'react-bootstrap'
 
-function View({uploadVideoStatus}) {
+function View({ uploadVideoStatus }) {
   const [allVideos, setAllVideos] = useState([])
+  const [deleteVideoStatus, setDeleteVideoStatus] = useState(false)
   const getVideos = async () => {
     const response = await getAllVideos();
     console.log("===all videos==");
@@ -14,18 +15,19 @@ function View({uploadVideoStatus}) {
   }
   useEffect(() => {
     getVideos()
-  }, [uploadVideoStatus])
+    setDeleteVideoStatus(false)
+  }, [uploadVideoStatus, deleteVideoStatus])
   return (
     <>
       <Row>
         {
           allVideos.length > 0 ?
             allVideos?.map((videos) => (
-              <Col sm={12} md={2} lg={2} xl={4} className=''>
-                <VideoCard dispalyVideo={videos} />
+              <Col sm={12} md={2} lg={2} xl={4} className='mt-2'>
+                <VideoCard dispalyVideo={videos} setDeleteVideoStatus={setDeleteVideoStatus} />
               </Col>
             )) :
-            <p>Nothing To Display</p>
+            <p style={{fontSize:'30px'}} className='text-warning m-4'>Nothing To Display</p>
         }
 
       </Row>

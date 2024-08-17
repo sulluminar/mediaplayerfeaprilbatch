@@ -15,11 +15,11 @@ function Home() {
                 <Link to='/watch' style={{ textDecoration: 'none', color: 'white', fontSize: '25px' }}> WATCH HISTORY</Link>
             </div>
             <div className='container mt-5 mb-5 d-flex justify-content-between'>
-                <div className="col-md-8 mt-5">
+                <div className="col-md-9 mt-5">
                     <h4 className='textStyle mb-3'>All Videos</h4>
                     <View uploadVideoStatus={uploadVideoStatus} />
                 </div>
-                <div className='category'>
+                <div className='category col-md-3'>
                     <Category />
                 </div>
             </div>

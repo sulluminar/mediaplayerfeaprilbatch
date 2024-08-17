@@ -7,7 +7,7 @@ import { uploadVideo } from '../services/AllApi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Add({setUploadVideoStatus}) {
+function Add({ setUploadVideoStatus }) {
     const [show, setShow] = useState(false);
 
     // state to store all form field values
@@ -22,8 +22,9 @@ function Add({setUploadVideoStatus}) {
 
     const addVideoDetails = async () => {
         const { caption, imageUrl, youtubeLink } = videoDetails
-        if ( !caption || !imageUrl || !youtubeLink) {
+        if (!caption || !imageUrl || !youtubeLink) {
             toast.warning('Please fill the form completely')
+            handleClose();
         }
         else {
             console.log("final data");
@@ -31,9 +32,14 @@ function Add({setUploadVideoStatus}) {
             const response = await uploadVideo(videoDetails);
             console.log(response)
             if (response.status === 201) {
-                setUploadVideoStatus(response.data)
                 toast.success(`${response.data.caption} successfully uploaded`);
+                setUploadVideoStatus(response.data)
                 handleClose();
+                setVideoDetails({
+                    caption: '',
+                    imageUrl: '',
+                    youtubeLink: ''
+                })
             }
             else {
                 toast.error("Some thing went wrong")
@@ -59,7 +65,7 @@ function Add({setUploadVideoStatus}) {
                 <Modal.Body className='bg-dark'>
                     <p className='textStyle' style={{ fontWeight: '700' }}>Please fill the form</p>
                     <Form className='border border-secondary p-3 rounded' data-bs-theme='light'>
-                    
+
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Control type="text" placeholder="Enter Video Caption"
                                 onChange={(e) => setVideoDetails({ ...videoDetails, caption: e.target.value })}
@@ -86,7 +92,7 @@ function Add({setUploadVideoStatus}) {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <ToastContainer />
+            <ToastContainer position='top-center' theme='colored' autoClose={2000}></ToastContainer>
         </>
     )
 }

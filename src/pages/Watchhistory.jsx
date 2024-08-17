@@ -1,7 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { deleteHistory, getHistory } from '../services/AllApi'
 
 function Watchhistory() {
+const [allHistory, setAllHistory]= useState([])
+  const getWatchHistory = async()=>{
+    const {data} = await getHistory();
+    setAllHistory(data)
+    console.log(data)
+  }
+  useEffect(()=>{
+    getWatchHistory();
+  },[])
+  const handleDelete = async(historyId)=>{
+    await deleteHistory(historyId)
+    getWatchHistory()
+  }
   return (
     <>
       <div className='container mt-5 d-flex justify-content-between mb-5'>
@@ -13,6 +27,7 @@ function Watchhistory() {
       </div>
       <table className='table container mb-5 mt-5' data-bs-theme='dark'>
           <thead >
+            
             <tr>
               <th>#</th>
               <th>Caption</th>
@@ -22,20 +37,19 @@ function Watchhistory() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Neela Nilave</td>
-              <td>https://www.youtube.com/watch?v=ufHnsVixMEs</td>
-              <td>07-08-2024 11:30AM</td>
-              <td><i class="fa-solid fa-trash"></i></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Neela Nilave</td>
-              <td>https://www.youtube.com/watch?v=ufHnsVixMEs</td>
-              <td>07-08-2024 11:30AM</td>
-              <td><i class="fa-solid fa-trash"></i></td>
-            </tr>
+          {
+              allHistory.length>0?
+              allHistory.map((item)=>(
+                <tr>
+                <td>{item.id}</td>
+                <td>{item.caption}</td>
+                <td>{item.url}</td>
+                <td>{item.timestamp}</td>
+                <td> <button className='btn btn-danger' onClick={()=>handleDelete(item?.id)}><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+              )):
+              <p style={{fontSize:'30px'}} className='text-warning m-4'>No History Found</p>
+            }
           </tbody>
       </table>
     </>
