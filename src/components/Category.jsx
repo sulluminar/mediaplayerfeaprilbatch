@@ -3,9 +3,10 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { addCategory, deleteCategory, getAllCategory } from '../services/AllApi';
+import { addCategory, deleteCategory, getAllCategory, getAllVideosById, updateCategory } from '../services/AllApi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import VideoCard from './VideoCard';
 
 function Category() {
     const [show, setShow] = useState(false);
@@ -55,8 +56,27 @@ function Category() {
             toast.error("Some thing went wrong")
         }
     }
-    const videoDrop = async (e) => {
+    const videoDrop = async (e, id) => {
         console.log("===on drop===")
+        // get video Id that we passed form video card
+        const videoid = e.dataTransfer.getData("videoID");
+        console.log(`Video with id ${videoid} need to put inside category with id ${id}`)
+        const { data } = await getAllVideosById(videoid);
+        console.log("video details:===")
+        console.log(data)
+        const selectedCategory = allCategory?.find(item => item.id === id);
+        selectedCategory.allVideos.push(data)
+        console.log("===Selected category");
+        console.log(selectedCategory);
+        const response = await updateCategory(selectedCategory, id)
+        getCategory()
+
+    }
+    const dragOver = (e) => {
+        // onDragOver method will trigger page refresh, so the videoID we are passing may lost
+        e.preventDefault();
+        console.log("===Inside Drag over====s");
+
     }
     return (
         <>
@@ -64,13 +84,21 @@ function Category() {
             {
                 allCategory?.length > 0 ?
                     allCategory.map((item) => (
-                        <div className='m-3 border border-secondary rounded p-3' 
-                            droppable onDrop={(e) =>videoDrop(e)}
+                        <div className='m-3 border border-secondary rounded p-3'
+                            droppable onDragOver={(e) => dragOver(e)}
+                            onDrop={(e) => videoDrop(e, item.id)}
                         >
                             <div className='d-flex justify-content-between align-items-center'>
                                 <h6 style={{ color: 'white' }}>{item.categoryName}</h6>
                                 <button className='btn btn-danger' onClick={() => handleDelete(item.id)}> <i class="fa-solid fa-trash"></i></button>
                             </div>
+                            {
+                                item.allVideos?.length > 0 ?
+                                    item.allVideos?.map(card => (
+                                        <VideoCard dispalyVideo={card} />
+                                    ))
+                                    : <p>Nothing to display</p>
+                            }
                         </div>
                     ))
                     : <p>No Categroy Found</p>

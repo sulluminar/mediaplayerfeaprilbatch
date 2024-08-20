@@ -14,36 +14,46 @@ export const getAllVideos = async () => {
 
 // delete video
 export const deleteVideo = async (id) => {
-    return await commonApi('DELETE', `${serverURL}/videos/${id}`,{})
+    return await commonApi('DELETE', `${serverURL}/videos/${id}`, {})
     // http://localhost:4000/videos/1
 }
 
 // add to watch history
-export const addToHistory = async (reqBody)=>{
-    return await commonApi('POST', `${serverURL}/history`,reqBody)
+export const addToHistory = async (reqBody) => {
+    return await commonApi('POST', `${serverURL}/history`, reqBody)
 }
 
 // get all history
-export const getHistory = async()=>{
-    return await commonApi('GET',`${serverURL}/history`,"")
+export const getHistory = async () => {
+    return await commonApi('GET', `${serverURL}/history`, "")
 }
 
 // delete history by id
-export const deleteHistory = async(id)=>{
-    return await commonApi('DELETE',`${serverURL}/history/${id}`,{})
+export const deleteHistory = async (id) => {
+    return await commonApi('DELETE', `${serverURL}/history/${id}`, {})
 }
 
 // add category
-export const addCategory = async(reqBody)=>{
-    return await commonApi('POST',`${serverURL}/categroy`,reqBody)
+export const addCategory = async (reqBody) => {
+    return await commonApi('POST', `${serverURL}/categroy`, reqBody)
 }
 
 // get all category
-export const getAllCategory = async()=>{
-    return await commonApi('GET',`${serverURL}/categroy`,"")
+export const getAllCategory = async () => {
+    return await commonApi('GET', `${serverURL}/categroy`, "")
 }
 
 // delete catetgory
-export const deleteCategory = async(id)=>{
-    return await commonApi('DELETE',`${serverURL}/categroy/${id}`,{})
+export const deleteCategory = async (id) => {
+    return await commonApi('DELETE', `${serverURL}/categroy/${id}`, {})
+}
+
+// get video details by id
+export const getAllVideosById = async (id) => {
+    return await commonApi('GET', `${serverURL}/videos/${id}`, "")
+}
+
+// update category with video details
+export const updateCategory = async (data, id) => {
+    return await commonApi('PUT', `${serverURL}/categroy/${id}`, data)
 }
